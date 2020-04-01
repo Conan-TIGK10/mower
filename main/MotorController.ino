@@ -26,3 +26,12 @@ void Reverse() {
   MotorR.run(-moveSpeed);
 }
 
+void TurnLeft() {
+ MotorL.run(-moveSpeed);
+ MotorR.run(moveSpeed);
+}
+
+void TurnRight() {
+ MotorL.run(moveSpeed);
+ MotorR.run(-moveSpeed);
+}
