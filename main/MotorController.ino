@@ -4,9 +4,11 @@
 
 MeDCMotor MotorL(M1);  
 MeDCMotor MotorR(M2);
-int moveSpeed = 0;
-int turnSpeed = 0;
-int minSpeed = 0;
+int _randomDirection;
+int _randomSpeed;
+int _moveSpeed = 0;
+int _turnSpeed = 0;
+int _minSpeed = 0;
 
 void loop() {
  
@@ -17,21 +19,46 @@ void loop() {
 }
 
 void Forward() {
-  MotorL.run(moveSpeed);
-  MotorR.run(moveSpeed);
+  MotorL.run(_moveSpeed);
+  MotorR.run(_moveSpeed);
 }
 
 void Reverse() {
-  MotorL.run(-moveSpeed);
-  MotorR.run(-moveSpeed);
+  MotorL.run(-_moveSpeed);
+  MotorR.run(-_moveSpeed);
 }
 
 void TurnLeft() {
- MotorL.run(-moveSpeed);
- MotorR.run(moveSpeed);
+ MotorL.run(-_moveSpeed);
+ MotorR.run(_moveSpeed);
 }
 
 void TurnRight() {
- MotorL.run(moveSpeed);
- MotorR.run(-moveSpeed);
+ MotorL.run(_moveSpeed);
+ MotorR.run(-_moveSpeed);
+}
+
+void ChangeDirectionRandom() {
+  // Might be better to just change direction when hitting the boundery area, and exclude going forward again.
+  randomSeed(millis());
+  _randomDirection = random(255);
+  
+  if (_randomDirection <= 65 )
+    TurnRight();
+  else if (_randomDirection <= 128)
+    TurnLeft();
+  else if (_randomDirection <= 193)
+    Forward();
+  else if (_randomDirection <= 255)
+    Reverse(); // Maybe not randomly reverse?
+}
+
+void ChangeSpeedRandom() {
+  randomSeed(millis());
+  _randomSpeed = random(255);
+  if (_randomSpeed < 200){
+  _moveSpeed = 200;
+  } else {
+    _moveSpeed = _randomSpeed;
+  }
 }
