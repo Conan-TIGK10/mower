@@ -56,6 +56,11 @@
 #include <MeVoice.h>
 #include <MeWifi.h>
 
+/*  --Project Modules --
+   -- Auto compiled --
+   BluetoothController
+*/
+
 /*************************************************************************
 Makeblock bluetooth car controller test code, shoulde be replaced with project code.
 
@@ -83,6 +88,7 @@ void setup()
     leftflag=false;
     rightflag=false;
     serial.begin(115200);
+    BluetoothController.setup()
 }
 int s1=0;
 int s2=0;
