@@ -8,8 +8,7 @@ int moveSpeed = 0;
 int turnSpeed = 0;
 int minSpeed = 0;
 
-void loop()
-{
+void loop() {
  
   //bluetooth get data (BluetoothController.btGetData())
     
@@ -17,9 +16,13 @@ void loop()
     //MotorR.run(s2);
 }
 
-void Forward()
-{
+void Forward() {
   MotorL.run(moveSpeed);
   MotorR.run(moveSpeed);
+}
+
+void Reverse() {
+  MotorL.run(-moveSpeed);
+  MotorR.run(-moveSpeed);
 }
 
