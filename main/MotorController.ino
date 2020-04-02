@@ -1,64 +1,41 @@
-#include "Makeblock.h"
-#include <SoftwareSerial.h>
-#include <Wire.h>
+#include <MeAuriga.h>
+MeEncoderOnBoard Encoder_1(SLOT1);
+MeEncoderOnBoard Encoder_2(SLOT2);
 
-MeDCMotor MotorL(M1);  
-MeDCMotor MotorR(M2);
-int _randomDirection;
-int _randomSpeed;
-int _moveSpeed = 0;
-int _turnSpeed = 0;
-int _minSpeed = 0;
+int16_t moveSpeed = 200;
 
-void loop() {
- 
-  //bluetooth get data (BluetoothController.btGetData())
-    
-    //MotorL.run(s1);
-    //MotorR.run(s2);
+void Forward(void)
+{
+  Encoder_1.setMotorPwm(-moveSpeed);
+  Encoder_2.setMotorPwm(moveSpeed);
 }
-
-void Forward() {
-  MotorL.run(_moveSpeed);
-  MotorR.run(_moveSpeed);
+void Backward(void)
+{
+  Encoder_1.setMotorPwm(moveSpeed);
+  Encoder_2.setMotorPwm(-moveSpeed);
 }
-
-void Reverse() {
-  MotorL.run(-_moveSpeed);
-  MotorR.run(-_moveSpeed);
+void BackwardAndTurnLeft(void)
+{
+  Encoder_1.setMotorPwm(moveSpeed/4);
+  Encoder_2.setMotorPwm(-moveSpeed);
 }
-
-void TurnLeft() {
- MotorL.run(-_moveSpeed);
- MotorR.run(_moveSpeed);
+void BackwardAndTurnRight(void)
+{
+  Encoder_1.setMotorPwm(moveSpeed);
+  Encoder_2.setMotorPwm(-moveSpeed/4);
 }
-
-void TurnRight() {
- MotorL.run(_moveSpeed);
- MotorR.run(-_moveSpeed);
+void TurnLeft(void)
+{
+  Encoder_1.setMotorPwm(-moveSpeed);
+  Encoder_2.setMotorPwm(moveSpeed/2);
 }
-
-void ChangeDirectionRandom() {
-  // Might be better to just change direction when hitting the boundery area, and exclude going forward again.
-  randomSeed(millis());
-  _randomDirection = random(255);
-  
-  if (_randomDirection <= 65 )
-    TurnRight();
-  else if (_randomDirection <= 128)
-    TurnLeft();
-  else if (_randomDirection <= 193)
-    Forward();
-  else if (_randomDirection <= 255)
-    Reverse(); // Maybe not randomly reverse?
+void TurnRight(void)
+{
+  Encoder_1.setMotorPwm(-moveSpeed/2);
+  Encoder_2.setMotorPwm(moveSpeed);
 }
-
-void ChangeSpeedRandom() {
-  randomSeed(millis());
-  _randomSpeed = random(255);
-  if (_randomSpeed < 200){
-  _moveSpeed = 200;
-  } else {
-    _moveSpeed = _randomSpeed;
-  }
+void TurnLeft1(void)
+{
+  Encoder_1.setMotorPwm(-moveSpeed);
+  Encoder_2.setMotorPwm(-moveSpeed);
 }
