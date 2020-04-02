@@ -61,19 +61,19 @@ void state_machine(int16_t sensors)
       break;
       
     case ROTATE_LEFT:
-      if (sensors == SENSOR_RIGHT) {
-        TurnLeft();
-      } else {
+      if (sensors != SENSOR_RIGHT) {
         state = STOP;
+      } else {
+        StopBackwardAndTurnRight();
       }
        
       break;
 
     case ROTATE_RIGHT:
-      if (sensors == SENSOR_LEFT ){
-         TurnRight();
+      if (sensors != SENSOR_LEFT ){
+         state = STOP;
       } else {
-        state = STOP;
+        StopBackwardAndTurnLeft();
       }
       break;
       
