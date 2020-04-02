@@ -17,10 +17,13 @@ int factor = 23;
 
 void setup()
 {
+  Serial.begin(9600);
 }
 
 void loop()
 {
+  //LT_IsInside();
+  //delay(500);
   // ChangeDirectionRandom();
 
 }
