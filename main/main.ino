@@ -26,20 +26,27 @@ void loop()
   // ChangeDirectionRandom();
   int temp = LT_IsInside();
   state_machine(temp);
+  delay(50);
 }
 
 void state_machine(int16_t sensors) 
 {
-  Serial.print(state);
+  Serial.print("state: ");
+  Serial.println(state);
+  Serial.println(sensors);
+    
   switch(state)
   {
     case STOP:
-      if(sensors == NONE) {
+      if (sensors == BOTH) {
+        Stop();
+      }
+        else if(sensors == NONE) {
         state = FORWARD;
       } else if (sensors == SENSOR_RIGHT) {
         //rotate left
         state = ROTATE_LEFT;
-      } else {
+      } else if (sensors == SENSOR_LEFT){
         //rotate right
         state = ROTATE_RIGHT;
       }
@@ -47,24 +54,26 @@ void state_machine(int16_t sensors)
       
     case FORWARD:
       if (sensors != NONE) {
+        state = STOP;
+      } else {
         Forward();
       }
       break;
       
     case ROTATE_LEFT:
-      if (sensors != SENSOR_RIGHT) {
+      if (sensors == SENSOR_RIGHT) {
         TurnLeft();
       } else {
-        state = FORWARD;
+        state = STOP;
       }
        
       break;
 
     case ROTATE_RIGHT:
-      if (sensors == SENSOR_RIGHT ){
+      if (sensors == SENSOR_LEFT ){
          TurnRight();
       } else {
-        state = FORWARD;
+        state = STOP;
       }
       break;
       

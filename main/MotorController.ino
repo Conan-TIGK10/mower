@@ -4,7 +4,7 @@ MeEncoderOnBoard Encoder_1(SLOT1);
 MeEncoderOnBoard Encoder_2(SLOT2);
 
 
-int16_t moveSpeed = 100;
+int16_t moveSpeed = 200;
 int16_t randomSpeed = 0;
 int16_t randomDirection = 0;
 
@@ -38,10 +38,11 @@ void TurnRight(void)
   Encoder_1.setMotorPwm(-moveSpeed/2);
   Encoder_2.setMotorPwm(moveSpeed);
 }
-void TurnLeft1(void)
+
+void Stop(void)
 {
-  Encoder_1.setMotorPwm(-moveSpeed);
-  Encoder_2.setMotorPwm(-moveSpeed);
+  Encoder_1.setMotorPwm(0);
+  Encoder_2.setMotorPwm(0);
 }
 
 void ChangeDirectionRandom(void) {
