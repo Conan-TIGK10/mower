@@ -17,10 +17,11 @@ int factor = 23;
 
 void setup()
 {
+  gyroSetup();
 }
 
 void loop()
 {
   // ChangeDirectionRandom();
-
+  runGyro();
 }
