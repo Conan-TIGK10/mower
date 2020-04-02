@@ -22,7 +22,7 @@ void runGyro(){
    
 }
 
-//gyro setup
+//gyro setup 
 void gyroSetup(){
   Serial.begin(115200);
   gyro.begin();
