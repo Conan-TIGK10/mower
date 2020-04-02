@@ -2,14 +2,14 @@
 
 
 #include "MeAuriga.h"
-#include <Wire.h>
+//#include <Wire.h>
 
 MeGyro gyro;
 
 //these are the variables the different values will be stored in
-uint16_t gyroX;
-uint16_t gyroY;
-uint16_t gyroZ; 
+double gyroX;
+double gyroY;
+double gyroZ; 
 
 //run this in the loop
 void runGyro(){
