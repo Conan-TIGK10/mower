@@ -4,7 +4,7 @@ MeEncoderOnBoard Encoder_1(SLOT1);
 MeEncoderOnBoard Encoder_2(SLOT2);
 
 
-int16_t moveSpeed = 200;
+int16_t moveSpeed = 100;
 int16_t randomSpeed = 0;
 int16_t randomDirection = 0;
 
