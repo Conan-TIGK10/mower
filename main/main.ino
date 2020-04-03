@@ -4,9 +4,13 @@ Makeblock bluetooth car controller test code, shoulde be replaced with project c
 I included all makeblock library files, which should be available in our project repo.
 Library files should be placed into Arduino installation folder -> installation folder\Arduino\libraries\Makeblock\
 **************************************************************************/
+#include <Arduino.h>
+#include <avr/wdt.h>
 #include <MeAuriga.h>
-#include <SoftwareSerial.h>
+#include "MeEEPROM.h"
 #include <Wire.h>
+#include <SoftwareSerial.h>
+
 
 int turnSpeed = 200;
 int distance=0;

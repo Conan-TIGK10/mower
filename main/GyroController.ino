@@ -1,15 +1,18 @@
 
 
 
-#include "MeAuriga.h"
-//#include <Wire.h>
-
-MeGyro gyro;
+MeGyro gyro(1,0x69);
 
 //these are the variables the different values will be stored in
 double gyroX;
 double gyroY;
 double gyroZ; 
+
+//gyro setup 
+void gyroSetup(){
+  Serial.begin(9600);
+  gyro.begin();
+}
 
 //run this in the loop
 void runGyro(){
@@ -19,16 +22,5 @@ void runGyro(){
   gyroX = gyro.getAngleX();
   gyroY = gyro.getAngleY();
   gyroZ = gyro.getAngleZ();
-
-  Serial.print(gyroX);
-  Serial.print(gyroY);
-  Serial.print(gyroZ);
    
-}
-
-//gyro setup 
-void gyroSetup(){
-  Serial.begin(115200);
-  gyro.begin();
-
 }
