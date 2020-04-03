@@ -14,3 +14,11 @@ none
 ```c++
 none
 ```
+## `state_machine(int16_t any) : void`
+
+**Description** : Default project state machine, expects sensor data as int16_t. Handles directional states dependant on sensor state data.
+### Use:
+```c++
+int16_t sensors = LT_IsInside();
+state_machine(sensors);
+```
