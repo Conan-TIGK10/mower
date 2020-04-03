@@ -7,3 +7,8 @@
 ```c++
 int16_t sensors = LT_IsInside();
 ```
+
+### Returns:
+```c++
+int16_t value = 0, 1, 2, 3
+```
