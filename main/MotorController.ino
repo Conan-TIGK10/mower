@@ -18,16 +18,7 @@ void Backward(void)
   Encoder_1.setMotorPwm(moveSpeed);
   Encoder_2.setMotorPwm(-moveSpeed);
 }
-void BackwardAndTurnLeft(void)
-{
-  Encoder_1.setMotorPwm(moveSpeed/4);
-  Encoder_2.setMotorPwm(-moveSpeed);
-}
-void BackwardAndTurnRight(void)
-{
-  Encoder_1.setMotorPwm(moveSpeed);
-  Encoder_2.setMotorPwm(-moveSpeed/4);
-}
+  
 void TurnLeft(void)
 {
   Encoder_1.setMotorPwm(-moveSpeed);
@@ -45,21 +36,6 @@ void Stop(void)
   Encoder_2.setMotorPwm(0);
 }
 
-void StopBackwardAndTurnRight(void)
-{
-    Stop();
-    delay(300);
-    BackwardAndTurnRight();
-    delay(2000);
-}
-
-void StopBackwardAndTurnLeft(void)
-{
-    Stop();
-    delay(300);
-    BackwardAndTurnLeft();
-    delay(2000);
-}
 
 void SetMoveSpeed (int16_t newSpeed) {
   moveSpeed = newSpeed;

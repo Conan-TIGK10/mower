@@ -10,17 +10,22 @@ Library files should be placed into Arduino installation folder -> installation 
 #include "MeEEPROM.h"
 #include <Wire.h>
 #include "LineTrackerController.h"
+#include "Timer.h"
 
 typedef enum {STOP, FORWARD, BACKWARDS, RANDOM, ROTATE_RIGHT, ROTATE_LEFT} States;
 
 States state = STOP;
 #include <SoftwareSerial.h>
 
+//timer library https://github.com/JChristensen/Timer
+Timer t;
+
 
 void setup()
 {
   Serial.begin(9600);
   gyroSetup();
+  t.every(1000, pulseTick);
 
 }
 
@@ -31,8 +36,16 @@ void loop()
   // ChangeDirectionRandom();
   int temp = LT_IsInside();
   state_machine(temp);
+  runGyro();
+  t.update();
   delay(50);
 }
+
+uint16_t tick = 0;
+void pulseTick(void){
+    tick++;
+  
+  }
 
 void state_machine(int16_t sensors) 
 {
@@ -44,16 +57,19 @@ void state_machine(int16_t sensors)
   {
     case STOP:
       if (sensors == BOTH) {
-        Stop();
+        state = ROTATE_RIGHT;
+        tick = 0;
       }
         else if(sensors == NONE) {
         state = FORWARD;
       } else if (sensors == SENSOR_RIGHT) {
         //rotate left
         state = ROTATE_LEFT;
+        tick = 0;
       } else if (sensors == SENSOR_LEFT){
         //rotate right
         state = ROTATE_RIGHT;
+        tick = 0;
       }
       break;
       
@@ -66,22 +82,38 @@ void state_machine(int16_t sensors)
       break;
       
     case ROTATE_LEFT:
-      if (sensors != SENSOR_RIGHT) {
+
+      Serial.print("Left Tick: ");
+      Serial.println(tick);
+
+      if(tick <= 3){
+        Backward();
+      }
+      else if(tick > 3 && tick < 6){
+        TurnLeft();
+      }
+      else{
         state = STOP;
-      } else {
-        StopBackwardAndTurnRight();
       }
        
       break;
 
     case ROTATE_RIGHT:
-      if (sensors != SENSOR_LEFT ){
-         state = STOP;
-      } else {
-        StopBackwardAndTurnLeft();
+
+
+      Serial.print("RIght Tick: ");
+      Serial.println(tick);
+
+      if(tick <= 3){
+        Backward();
       }
+      else if(tick > 3 && tick < 6){
+        TurnRight();
+      } else{
+        state = STOP;
+      }
+
       break;
       
   } 
-  runGyro();
 }
