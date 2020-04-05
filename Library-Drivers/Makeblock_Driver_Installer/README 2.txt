@@ -1,0 +1,2 @@
+Drivers for windows: https://raw.githubusercontent.com/Makeblock-official/Makeblock-USB-Driver/master/Makeblock_Driver_Installer.zip
+Drivers for Mac: http://blog.sengotta.net/wp-content/uploads/2015/11/CH34x_Install.zip

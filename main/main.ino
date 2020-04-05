@@ -4,19 +4,24 @@ Makeblock bluetooth car controller test code, shoulde be replaced with project c
 I included all makeblock library files, which should be available in our project repo.
 Library files should be placed into Arduino installation folder -> installation folder\Arduino\libraries\Makeblock\
 **************************************************************************/
+#include <Arduino.h>
+#include <avr/wdt.h>
 #include <MeAuriga.h>
-#include <SoftwareSerial.h>
+#include "MeEEPROM.h"
 #include <Wire.h>
 #include "LineTrackerController.h"
 
 typedef enum {STOP, FORWARD, BACKWARDS, RANDOM, ROTATE_RIGHT, ROTATE_LEFT} States;
 
 States state = STOP;
+#include <SoftwareSerial.h>
 
 
 void setup()
 {
   Serial.begin(9600);
+  gyroSetup();
+
 }
 
 void loop()
@@ -78,4 +83,5 @@ void state_machine(int16_t sensors)
       break;
       
   } 
+  runGyro();
 }
