@@ -10,17 +10,25 @@ Library files should be placed into Arduino installation folder -> installation 
 #include "MeEEPROM.h"
 #include <Wire.h>
 #include "LineTrackerController.h"
+#include "Timer.h"
 
 typedef enum {STOP, FORWARD, BACKWARDS, RANDOM, ROTATE_RIGHT, ROTATE_LEFT} States;
 
 States state = STOP;
 #include <SoftwareSerial.h>
 
+//timer library https://github.com/JChristensen/Timer
+Timer t;
+uint16_t tick = 0;
+uint16_t tickRate = 1000;
+uint8_t firstInterval = 3;
+uint8_t secondInterval = 6;
 
 void setup()
 {
   Serial.begin(9600);
   gyroSetup();
+  t.every(tickRate, pulseTick);
 
 }
 
@@ -31,8 +39,15 @@ void loop()
   // ChangeDirectionRandom();
   int temp = LT_IsInside();
   state_machine(temp);
+  runGyro();
+  t.update();
   delay(50);
 }
+
+void pulseTick(void){
+    tick++;
+  
+  }
 
 void state_machine(int16_t sensors) 
 {
@@ -44,16 +59,19 @@ void state_machine(int16_t sensors)
   {
     case STOP:
       if (sensors == BOTH) {
-        Stop();
+        state = ROTATE_RIGHT;
+        tick = 0;
       }
         else if(sensors == NONE) {
         state = FORWARD;
       } else if (sensors == SENSOR_RIGHT) {
         //rotate left
         state = ROTATE_LEFT;
+        tick = 0;
       } else if (sensors == SENSOR_LEFT){
         //rotate right
         state = ROTATE_RIGHT;
+        tick = 0;
       }
       break;
       
@@ -66,22 +84,38 @@ void state_machine(int16_t sensors)
       break;
       
     case ROTATE_LEFT:
-      if (sensors != SENSOR_RIGHT) {
+
+      Serial.print("Left Tick: ");
+      Serial.println(tick);
+
+      if(tick <= firstInterval){
+        Backward();
+      }
+      else if(tick > firstInterval && tick < secondInterval){
+        TurnLeft();
+      }
+      else{
         state = STOP;
-      } else {
-        StopBackwardAndTurnRight();
       }
        
       break;
 
     case ROTATE_RIGHT:
-      if (sensors != SENSOR_LEFT ){
-         state = STOP;
-      } else {
-        StopBackwardAndTurnLeft();
+
+
+      Serial.print("RIght Tick: ");
+      Serial.println(tick);
+
+      if(tick <= firstInterval){
+        Backward();
       }
+      else if(tick > firstInterval && tick < secondInterval){
+        TurnRight();
+      } else{
+        state = STOP;
+      }
+
       break;
       
   } 
-  runGyro();
 }
