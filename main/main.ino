@@ -19,13 +19,16 @@ States state = STOP;
 
 //timer library https://github.com/JChristensen/Timer
 Timer t;
-
+uint16_t tick = 0;
+uint16_t tickRate = 1000;
+uint8_t firstInterval = 3;
+uint8_t secondInterval = 6;
 
 void setup()
 {
   Serial.begin(9600);
   gyroSetup();
-  t.every(1000, pulseTick);
+  t.every(tickRate, pulseTick);
 
 }
 
@@ -41,7 +44,6 @@ void loop()
   delay(50);
 }
 
-uint16_t tick = 0;
 void pulseTick(void){
     tick++;
   
@@ -86,10 +88,10 @@ void state_machine(int16_t sensors)
       Serial.print("Left Tick: ");
       Serial.println(tick);
 
-      if(tick <= 3){
+      if(tick <= firstInterval){
         Backward();
       }
-      else if(tick > 3 && tick < 6){
+      else if(tick > firstInterval && tick < secondInterval){
         TurnLeft();
       }
       else{
@@ -104,10 +106,10 @@ void state_machine(int16_t sensors)
       Serial.print("RIght Tick: ");
       Serial.println(tick);
 
-      if(tick <= 3){
+      if(tick <= firstInterval){
         Backward();
       }
-      else if(tick > 3 && tick < 6){
+      else if(tick > firstInterval && tick < secondInterval){
         TurnRight();
       } else{
         state = STOP;
