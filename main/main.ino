@@ -54,7 +54,14 @@ void state_machine(int16_t sensors)
   Serial.print("state: ");
   Serial.println(state);
   Serial.println(sensors);
-    
+  Serial.print("ultrasonic: ");
+  Serial.println(GetUltrasonicDistance());
+
+
+  if(GetUltrasonicDistance() < 5 && state != ROTATE_RIGHT){
+    state = ROTATE_RIGHT;
+    tick = 0;
+  }
   switch(state)
   {
     case STOP:
