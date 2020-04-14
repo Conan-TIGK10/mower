@@ -46,3 +46,13 @@ void runGyro(){
   delay(500);*/
 
 }
+double getAngleZ(void){
+  return gyro.getAngleZ();
+  
+  }
+double getGyroChangeX(void){
+  return gyroChangeX;
+  }
+double getGyroChangeY(void){
+  return gyroChangeY;
+  }

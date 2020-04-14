@@ -24,11 +24,13 @@ uint16_t tickRate = 1000;
 uint8_t firstInterval = 3;
 uint8_t secondInterval = 6;
 
+
 void setup()
 {
   Serial.begin(9600);
   gyroSetup();
   t.every(tickRate, pulseTick);
+  setupVisual();
 
 }
 
@@ -40,13 +42,23 @@ void loop()
   int temp = LT_IsInside();
   state_machine(temp);
   runGyro();
+  updateVisual(getAngleZ());
+  ultrasonicCheck();
   t.update();
-  delay(50);
+  delay(100);
 }
 
 void pulseTick(void){
     tick++;
   
+  }
+
+void ultrasonicCheck(void){
+  
+   if(GetUltrasonicDistance() < 5 && state != ROTATE_RIGHT){
+      state = ROTATE_RIGHT;
+      tick = 0;
+  }
   }
 
 void state_machine(int16_t sensors) 
@@ -56,12 +68,6 @@ void state_machine(int16_t sensors)
   Serial.println(sensors);
   Serial.print("ultrasonic: ");
   Serial.println(GetUltrasonicDistance());
-
-
-  if(GetUltrasonicDistance() < 5 && state != ROTATE_RIGHT){
-    state = ROTATE_RIGHT;
-    tick = 0;
-  }
   switch(state)
   {
     case STOP:
