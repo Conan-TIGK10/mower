@@ -44,6 +44,17 @@ void btSendMultiplePosData(int protocol, double* outData, int size) {
   }
 }
 
+//Use incase btSendMultiplePosData() does not work as intended
+void btSendPosData(int protocol, double x, double y) {
+    if(bluetooth.available()) {
+      //println incase application expects \n, might need adjustments.
+      bluetooth.println(protocol);
+      bluetooth.println(x);
+      bluetooth.println(y);
+      delay(20); // Might work without delay, need to ensure that its not called constantly
+  }
+}
+  
 // Returns unsigne char table of bt data
 unsigned char btReadData() {
  int readdata = 0,i = 0,count = 0;
