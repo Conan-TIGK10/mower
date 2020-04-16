@@ -25,8 +25,8 @@ uint8_t secondInterval = 6;
 
 void setup()
 {
-  Serial.begin(9600);
-  //bluetoothSetup();
+  Serial.begin(115200);
+  bluetoothSetup();
   gyroSetup();
   t.every(tickRate, pulseTick);
 
@@ -41,7 +41,7 @@ void loop()
   state_machine(temp);
   runGyro();
   t.update();
-  //btSendPosData(0, 0);
+  btSendPosData(0, 0);
   delay(50);
 }
 

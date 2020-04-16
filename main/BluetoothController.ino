@@ -11,7 +11,6 @@ MeBluetooth bluetooth(PORT_5);
 unsigned char table[128] = {0};
 void bluetoothSetup()
 {
-    Serial.begin(115200);
     bluetooth.begin(115200);
     Serial.println("Bluetooth Start!");
 }
@@ -22,7 +21,6 @@ void btEnd() {
 
 // needs to be called mutiple times for sending multiple data values
 void btSendPosData(int protocol, double outData) {
-  if(bluetooth.available()) {
     Serial.print("Sending");
     Serial.println(outData);
     bluetooth.write(protocol);
@@ -30,12 +28,10 @@ void btSendPosData(int protocol, double outData) {
     bluetooth.write(outData);
     bluetooth.write(",");
     delay(20); // Might work without delay, need to ensure that its not called constantly
-  }
 }
 
 //sending multiple data, needs size of array/pointer.
 void btSendMultiplePosData(int protocol, double* outData, int size) {
-  if(bluetooth.available()) {
     bluetooth.write(protocol);
     bluetooth.write(",");
     for (int i = 0; i < size; i++){
@@ -43,18 +39,15 @@ void btSendMultiplePosData(int protocol, double* outData, int size) {
       bluetooth.write(",");
     }
     delay(20); // Might work without delay, need to ensure that its not called constantly
-  }
 }
 
 //Use incase btSendMultiplePosData() does not work as intended
 void btSendPosData(int protocol, double x, double y) {
-    if(bluetooth.available()) {
       //println incase application expects \n, might need adjustments.
       bluetooth.println(protocol);
       bluetooth.println(x);
       bluetooth.println(y);
       delay(20); // Might work without delay, need to ensure that its not called constantly
-  }
 }
   
 // Returns unsigne char table of bt data
