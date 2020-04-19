@@ -6,6 +6,12 @@
 
 /*
 Blue module can only be connected to port 3, 4, 5, 6 of base shield.
+
+I/GATT: 00001801-0000-1000-8000-00805f9b34fb
+I/GATT: 00001800-0000-1000-8000-00805f9b34fb
+I/GATT: 0000ffe1-0000-1000-8000-00805f9b34fb
+I/GATT: 0000ffe4-0000-1000-8000-00805f9b34fb
+    9e5d1e47-5c13-43a0-8635-82ad38a1386f
 */
 MeBluetooth bluetooth(PORT_5);
 unsigned char table[128] = {0};
@@ -21,12 +27,10 @@ void btEnd() {
 
 // needs to be called mutiple times for sending multiple data values
 void btSendPosData(int protocol, double outData) {
-    Serial.print("Sending");
-    Serial.println(outData);
-    bluetooth.write(protocol);
-    bluetooth.write(",");
-    bluetooth.write(outData);
-    bluetooth.write(",");
+    //Serial.write("Sending ");
+    //Serial.println(outData);
+    Serial.print("Sending ");
+    Serial.print(outData);
     delay(20); // Might work without delay, need to ensure that its not called constantly
 }
 
@@ -53,15 +57,16 @@ void btSendPosData(int protocol, double x, double y) {
 // Returns unsigne char table of bt data
 unsigned char btReadData() {
  int readdata = 0,i = 0,count = 0;
- if(bluetooth.available()) {
-   while((readdata == bluetooth.read()) != (int)-1) {
-      table[count] = readdata;
-      count++;
-      delay(1);
+ char data[30];
+while(Serial.available() > 0){
+    data[count] = Serial.read();
+    count++;
+  }
+
+  for(int x = 0; x < count; x++){
+      Serial.println(data[x]);
+      Serial.write(readdata);
     }
-    for(i = 0;i<count;i++) {
-      Serial.write(table[i]);
-    }
- } 
+   
  return table;
 }

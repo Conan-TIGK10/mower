@@ -31,7 +31,6 @@ void setup()
   t.every(tickRate, pulseTick);
 
 }
-
 void loop()
 {
   //LT_IsInside();
@@ -41,7 +40,8 @@ void loop()
   state_machine(temp);
   runGyro();
   t.update();
-  btSendPosData(0, 0);
+  btSendPosData(0,0);
+  //btReadData();
   delay(50);
 }
 
@@ -52,11 +52,12 @@ void pulseTick(void){
 
 void state_machine(int16_t sensors) 
 {
+  /*
   Serial.print("state: ");
   Serial.println(state);
   Serial.println(sensors);
   Serial.print("ultrasonic: ");
-  Serial.println(GetUltrasonicDistance());
+  Serial.println(GetUltrasonicDistance());*/
 
 
   if(GetUltrasonicDistance() < 5 && state != ROTATE_RIGHT){
@@ -97,8 +98,8 @@ void state_machine(int16_t sensors)
       
     case ROTATE_LEFT:
 
-      Serial.print("Left Tick: ");
-      Serial.println(tick);
+      //Serial.print("Left Tick: ");
+      //Serial.println(tick);
 
       if(tick <= firstInterval){
         Backward();
@@ -115,8 +116,8 @@ void state_machine(int16_t sensors)
     case ROTATE_RIGHT:
 
 
-      Serial.print("RIght Tick: ");
-      Serial.println(tick);
+      //Serial.print("RIght Tick: ");
+      //Serial.println(tick);
 
       if(tick <= firstInterval){
         Backward();
