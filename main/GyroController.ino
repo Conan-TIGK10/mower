@@ -15,7 +15,6 @@ double gyroChangeY;
 
 //gyro setup 
 void gyroSetup(){
-  Serial.begin(9600);
   gyro.begin();
 }
 
