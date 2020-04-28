@@ -55,18 +55,21 @@ void btSendPosData(int protocol, double x, double y) {
 }
   
 // Returns unsigne char table of bt data
-unsigned char btReadData() {
+char * btReadData() {
+ char *data = (char*) malloc(32);
  int readdata = 0,i = 0,count = 0;
- char data[30];
+ *(data) = '/';
+ *(data+1) = '1';
+ *(data+2) = ',';
+ *(data+3) = '1';
+ *(data+4) = '4';
+ *(data+5) = ',';
+ *(data+6) = '2';
+ *(data+7) = '&';
+ /*
 while(Serial.available() > 0){
     data[count] = Serial.read();
     count++;
-  }
-
-  for(int x = 0; x < count; x++){
-      Serial.println(data[x]);
-      Serial.write(readdata);
-    }
-   
- return table;
+  }*/
+  return data;
 }

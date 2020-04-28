@@ -23,6 +23,10 @@ uint16_t tickRate = 1000;
 uint8_t firstInterval = 3;
 uint8_t secondInterval = 6;
 
+int mode = 0;
+int xJoystick = 0;
+int yJoystick = 0;
+
 void setup()
 {
   Serial.begin(115200);
@@ -40,8 +44,10 @@ void loop()
   state_machine(temp);
   runGyro();
   t.update();
-  btSendPosData(0,0);
-  //btReadData();
+  //btSendPosData(0,0);
+
+  parseData(btReadData());
+
   delay(50);
 }
 
@@ -132,3 +138,53 @@ void state_machine(int16_t sensors)
       
   } 
 }
+
+void parseData(char * data){
+  int count = 0;
+  int isX = 0; //if 0 then its the x value, if 1 then its y
+  while(data[count] != '&' || (data[0] == '/' && count < 32)){
+    if(count == 1){
+        mode = data[1] - '0';
+
+      }else if(data[count] == ',' && isX == 0){
+        int internalCount = 1;
+        isX = 1;
+        while(data[count+internalCount] != ','){
+          internalCount++;
+        }
+        if(internalCount == 2){ //X är en siffra
+          xJoystick = (data[count+1] - '0');
+        }
+        if(internalCount == 3){ //X är två siffor
+          xJoystick = ((data[count+1] - '0')*10) + (data[count+2] - '0');
+        }
+        if(internalCount == 4){ //X är tre siffror
+          xJoystick = ((data[count+1] - '0')*100) + ((data[count+2] - '0')*10) + (data[count+3] - '0');
+        }
+        count ++;
+      }else if(data[count] == ','){
+        int internalCount = 1;
+        while(data[count+internalCount] != '&'){
+          internalCount++;
+        }
+        if(internalCount == 2){ //Y är en siffra
+          yJoystick = (data[count+1] - '0');
+        }
+        if(internalCount == 3){ //Y är två siffor
+          yJoystick = ((data[count+1] - '0')*10) + (data[count+2] - '0');
+        }
+        if(internalCount == 4){ //Y är tre siffror
+          yJoystick = ((data[count+1] - '0')*100) + ((data[count+2] - '0')*10) + (data[count+3] - '0');
+        }
+        count ++;
+      }
+    count++;
+    }
+    Serial.print("Mode: ");
+    Serial.println(mode);
+    Serial.print("X: ");
+    Serial.println(xJoystick);
+    Serial.print("Y: ");
+    Serial.println(yJoystick);
+    free(data);
+  }
