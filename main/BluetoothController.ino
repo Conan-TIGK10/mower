@@ -35,7 +35,7 @@ void btSendPosData(int protocol, double outData) {
 }
 
 //sending multiple data, needs size of array/pointer.
-void btSendMultiplePosData(int protocol, double* outData, int size) {
+/* void btSendMultiplePosData(int protocol, double* outData, int size) {
     bluetooth.write(protocol);
     bluetooth.write(",");
     for (int i = 0; i < size; i++){
@@ -44,7 +44,7 @@ void btSendMultiplePosData(int protocol, double* outData, int size) {
     }
     delay(20); // Might work without delay, need to ensure that its not called constantly
 }
-
+*/
 //Use incase btSendMultiplePosData() does not work as intended
 void btSendPosData(int protocol, double x, double y) {
       //println incase application expects \n, might need adjustments.
@@ -58,18 +58,20 @@ void btSendPosData(int protocol, double x, double y) {
 char * btReadData() {
  char *data = (char*) malloc(32);
  int readdata = 0,i = 0,count = 0;
+ /*
  *(data) = '/';
  *(data+1) = '1';
  *(data+2) = ',';
  *(data+3) = '1';
- *(data+4) = '4';
- *(data+5) = ',';
- *(data+6) = '2';
- *(data+7) = '&';
- /*
-while(Serial.available() > 0){
-    data[count] = Serial.read();
-    count++;
-  }*/
+ *(data+4) = ',';
+ *(data+5) = '2';
+ *(data+6) = '&';
+ */
+
+  while(Serial.available() > 0){
+      data[count] = Serial.read();
+      count++;
+  }
+  
   return data;
 }
