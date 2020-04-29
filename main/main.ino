@@ -11,7 +11,7 @@ Library files should be placed into Arduino installation folder -> installation 
 #include "LineTrackerController.h"
 #include "Timer.h"
 
-typedef enum {STOP, FORWARD, BACKWARDS, RANDOM, ROTATE_RIGHT, ROTATE_LEFT} States;
+typedef enum {STOP, FORWARD, BACKWARDS, RANDOM, ROTATE_RIGHT, ROTATE_LEFT, JOYSTICK} States;
 
 States state = STOP;
 #include <SoftwareSerial.h>
@@ -20,8 +20,8 @@ States state = STOP;
 Timer t;
 uint16_t tick = 0;
 uint16_t tickRate = 1000;
-uint8_t firstInterval = 3;
-uint8_t secondInterval = 6;
+uint8_t firstInterval = 1;
+uint8_t secondInterval = 3;
 
 int mode = 0;
 int xJoystick = 0;
@@ -46,7 +46,8 @@ void loop()
   t.update();
   //btSendPosData(0,0);
 
-  parseData(btReadData());
+  if (Serial.available() > 0)
+    parseData(btReadData());
 
   delay(50);
 }
@@ -135,6 +136,30 @@ void state_machine(int16_t sensors)
       }
 
       break;
+
+    case JOYSTICK:
+      if(xJoystick == 0 && yJoystick == 0) {
+        Serial.print(xJoystick);
+        Serial.print(yJoystick);
+        Stop();
+      }
+      else if(yJoystick == 1) {
+        Serial.print(yJoystick);
+        Forward();
+      }
+      else if(xJoystick == 2) {
+        Serial.print(xJoystick);
+        TurnRight();
+      }
+      else if(yJoystick == 2) {
+        Serial.print(yJoystick);
+        Backward();
+      }
+      else if(xJoystick == 1) {
+        Serial.print(xJoystick);
+        TurnLeft();
+      }
+      break;
       
   } 
 }
@@ -145,6 +170,11 @@ void parseData(char * data){
   while(data[count] != '&' || (data[0] == '/' && count < 32)){
     if(count == 1){
         mode = data[1] - '0';
+        if(mode == 1) {
+          state = JOYSTICK;
+        } else {
+          state = STOP;
+        }
 
       }else if(data[count] == ',' && isX == 0){
         int internalCount = 1;
@@ -208,11 +238,6 @@ void parseData(char * data){
       }
     count++;
     }
-    Serial.print("Mode: ");
-    Serial.println(mode);
-    Serial.print("X: ");
-    Serial.println(xJoystick);
-    Serial.print("Y: ");
-    Serial.println(yJoystick);
     free(data);
   }
+      
