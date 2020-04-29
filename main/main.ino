@@ -149,32 +149,60 @@ void parseData(char * data){
       }else if(data[count] == ',' && isX == 0){
         int internalCount = 1;
         isX = 1;
+        int isMinus = 0;
+        if(data[count+1] == '-'){
+          isMinus = 1;
+          count++;
+          }
         while(data[count+internalCount] != ','){
           internalCount++;
         }
         if(internalCount == 2){ //X är en siffra
           xJoystick = (data[count+1] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
         }
         if(internalCount == 3){ //X är två siffor
           xJoystick = ((data[count+1] - '0')*10) + (data[count+2] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
         }
         if(internalCount == 4){ //X är tre siffror
           xJoystick = ((data[count+1] - '0')*100) + ((data[count+2] - '0')*10) + (data[count+3] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
         }
         count ++;
       }else if(data[count] == ','){
         int internalCount = 1;
+        int isMinus = 0;
+        if(data[count+1] == '-'){
+          isMinus = 1;
+          count++;
+          }
         while(data[count+internalCount] != '&'){
           internalCount++;
         }
         if(internalCount == 2){ //Y är en siffra
           yJoystick = (data[count+1] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
         }
         if(internalCount == 3){ //Y är två siffor
           yJoystick = ((data[count+1] - '0')*10) + (data[count+2] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
         }
         if(internalCount == 4){ //Y är tre siffror
           yJoystick = ((data[count+1] - '0')*100) + ((data[count+2] - '0')*10) + (data[count+3] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
         }
         count ++;
       }
