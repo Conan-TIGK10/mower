@@ -139,24 +139,18 @@ void state_machine(int16_t sensors)
 
     case JOYSTICK:
       if(xJoystick == 0 && yJoystick == 0) {
-        Serial.print(xJoystick);
-        Serial.print(yJoystick);
         Stop();
       }
       else if(yJoystick == 1) {
-        Serial.print(yJoystick);
         Forward();
       }
       else if(xJoystick == 2) {
-        Serial.print(xJoystick);
         TurnRight();
       }
       else if(yJoystick == 2) {
-        Serial.print(yJoystick);
         Backward();
       }
       else if(xJoystick == 1) {
-        Serial.print(xJoystick);
         TurnLeft();
       }
       break;
