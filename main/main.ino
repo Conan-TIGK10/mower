@@ -37,15 +37,11 @@ void setup()
 }
 void loop()
 {
-  //LT_IsInside();
-  //delay(500);
-  // ChangeDirectionRandom();
   int temp = LT_IsInside();
   state_machine(temp);
   runGyro();
   t.update();
-  //btSendPosData(0,0);
-
+  btSendPosData(123, 20000, 55, 0, 0);
   if (Serial.available() > 0)
     parseData(btReadData());
 
