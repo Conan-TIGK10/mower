@@ -7,6 +7,26 @@ MeEncoderOnBoard Encoder_2(SLOT2);
 int16_t moveSpeed = 120;
 int16_t randomSpeed = 0;
 int16_t randomDirection = 0;
+float motorCounterL = 0;
+float motorCounterR = 0;
+
+void MotorLoop(){
+  Encoder_1.loop();
+  Encoder_2.loop();
+  if (digitalRead(Encoder_1.getPortA())) {
+    motorCounterL ++;
+  }
+  if (digitalRead(Encoder_2.getPortA())) {
+    motorCounterR ++;
+  }
+}
+
+void printCounter(){
+  Serial.print("pulse counterL?:");
+  Serial.println(motorCounterL);
+  Serial.print("pulse counterR?:");
+  Serial.println(motorCounterR);
+}
 
 void Forward(void)
 {
@@ -15,17 +35,20 @@ void Forward(void)
 }
 void Backward(void)
 {
+  ResetDistance();
   Encoder_1.setMotorPwm(moveSpeed);
   Encoder_2.setMotorPwm(-moveSpeed);
 }
   
 void TurnLeft(void)
 {
+  ResetDistance();
   Encoder_1.setMotorPwm(-moveSpeed);
   Encoder_2.setMotorPwm(-moveSpeed);
 }
 void TurnRight(void)
 {
+  ResetDistance();
   Encoder_1.setMotorPwm(moveSpeed);
   Encoder_2.setMotorPwm(moveSpeed);
 }
@@ -85,6 +108,23 @@ long GetEncoderPulseCounterL() {
 
 long GetEncoderPulseCounterR() {
   return Encoder_2.getPulsePos();
+}
+
+float GetDistance() {
+  float distance = 0;
+  if (motorCounterL >= motorCounterR){
+     distance = motorCounterL / 6,5;
+  } /*
+  else {
+    distance = motorCounterR / 6,5;
+  } */
+  distance = distance * 11,9;
+  return distance;
+}
+
+void ResetDistance() {
+  motorCounterL = 0;
+  motorCounterR = 0;
 }
 
 // Used to reset distance counter, could perhaps be called when changing direction to keep track of how long the robot has moven in a given direction.

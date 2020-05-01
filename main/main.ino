@@ -33,6 +33,7 @@ void setup()
   bluetoothSetup();
   gyroSetup();
   t.every(tickRate, pulseTick);
+  SetupTTC();
 
 }
 void loop()
@@ -40,11 +41,16 @@ void loop()
   int temp = LT_IsInside();
   state_machine(temp);
   runGyro();
+  MotorLoop();
   t.update();
-  btSendPosData(123, 20000, 55, 0, 0);
-  if (Serial.available() > 0)
-    parseData(btReadData());
-
+  
+  //printCounter();
+  //btSendPosData(123, 20000, 55, 0, 0);
+  if (Serial.available() > 0){
+    //parseData(btReadData());
+  }
+    Serial.println("distance: ");
+    Serial.print(GetDistance());
   delay(50);
 }
 
