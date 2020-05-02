@@ -18,8 +18,11 @@ States state = STOP;
 
 //timer library https://github.com/JChristensen/Timer
 Timer t;
+Timer milliTimer;
+uint16_t tickMillis = 0;
+uint16_t tickRateMillis = 1;
 uint16_t tick = 0;
-uint16_t tickRate = 1000;
+uint16_t tickRateSeconds = 1000;
 uint8_t firstInterval = 1;
 uint8_t secondInterval = 3;
 
@@ -32,7 +35,8 @@ void setup()
   Serial.begin(115200);
   bluetoothSetup();
   gyroSetup();
-  t.every(tickRate, pulseTick);
+  t.every(tickRateSeconds, pulseTickSeconds);
+  milliTimer.every(tickrateMillis, pulseTickMillis)
   SetupTTC();
 
 }
@@ -54,10 +58,17 @@ void loop()
   delay(50);
 }
 
-void pulseTick(void){
+void pulseTickSeconds(void){
     tick++;
   
   }
+void pulseTickMillis(void) {
+  if (tickMillis >= 65535) {
+    tickMillis = 0;
+  } else {
+    tickMillis++;
+  }
+}
 
 void state_machine(int16_t sensors) 
 {
