@@ -93,8 +93,8 @@ void state_machine(int16_t sensors)
         tick = 0;
       }
         else if(sensors == NONE) {
-        state = FORWARD;
         ResetDistance();
+        state = FORWARD;
       } else if (sensors == SENSOR_RIGHT) {
         //rotate left
         ResetDistance();
