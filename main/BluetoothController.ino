@@ -26,9 +26,8 @@ void btEnd() {
 }
 
 // needs to be called mutiple times for sending multiple data values
-void btSendPosData(int gyro, int motor, int ultra, int lightH, int lightV) {
-    //Serial.write("Sending ");
-    //Serial.println(outData);
+void btSendPosData(int gyro, int motor, int ultra, int lightH, unsigned long milli) {
+
     Serial.print("/");
     Serial.print(gyro);
     Serial.print(",");
@@ -38,7 +37,7 @@ void btSendPosData(int gyro, int motor, int ultra, int lightH, int lightV) {
     Serial.print(",");
     Serial.print(lightH);
     Serial.print(",");
-    Serial.print(lightV);
+    Serial.print(milli);
     Serial.print("&");
     delay(20); // Might work without delay, need to ensure that its not called constantly
 }

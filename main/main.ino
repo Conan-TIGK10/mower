@@ -18,9 +18,10 @@ States state = STOP;
 
 //timer library https://github.com/JChristensen/Timer
 Timer t;
-Timer milliTimer;
 uint16_t tickMillis = 0;
-uint16_t tickRateMillis = 1;
+uint16_t tickRateMillis = 10;
+uint16_t bluetoothTick = 0;
+uint16_t bluetoothTickRate = 100;
 uint16_t tick = 0;
 uint16_t tickRateSeconds = 1000;
 uint8_t firstInterval = 1;
@@ -36,7 +37,8 @@ void setup()
   bluetoothSetup();
   gyroSetup();
   t.every(tickRateSeconds, pulseTickSeconds);
-  milliTimer.every(tickrateMillis, pulseTickMillis)
+  t.every(tickRateMillis, pulseTickMillis);
+  t.every(bluetoothTickRate, pulseTickBluetooth);
   SetupTTC();
 
 }
@@ -47,14 +49,9 @@ void loop()
   runGyro();
   MotorLoop();
   t.update();
-  
-  //printCounter();
-  //btSendPosData(123, 20000, 55, 0, 0);
   if (Serial.available() > 0){
     //parseData(btReadData());
   }
-    Serial.println("distance: ");
-    Serial.print(GetDistance());
   delay(50);
 }
 
@@ -70,16 +67,14 @@ void pulseTickMillis(void) {
   }
 }
 
+void pulseTickBluetooth(void) {
+    unsigned long timeMilli = millis();
+    btSendPosData(GetGyro(), GetDistance(), GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+}
+
+
 void state_machine(int16_t sensors) 
 {
-  /*
-  Serial.print("state: ");
-  Serial.println(state);
-  Serial.println(sensors);
-  Serial.print("ultrasonic: ");
-  Serial.println(GetUltrasonicDistance());*/
-
-
   if(GetUltrasonicDistance() < 5 && state != ROTATE_RIGHT){
     state = ROTATE_RIGHT;
     tick = 0;
@@ -118,8 +113,6 @@ void state_machine(int16_t sensors)
       
     case ROTATE_LEFT:
 
-      //Serial.print("Left Tick: ");
-      //Serial.println(tick);
 
       if(tick <= firstInterval){
         Backward();

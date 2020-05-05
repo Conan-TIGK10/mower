@@ -45,3 +45,9 @@ void runGyro(){
   delay(500);*/
 
 }
+
+double GetGyro() {
+  if (gyroZ < 0) {
+   return 360 + gyroZ;
+  }
+}
