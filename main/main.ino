@@ -21,7 +21,7 @@ Timer t;
 uint16_t tickMillis = 0;
 uint16_t tickRateMillis = 10;
 uint16_t bluetoothTick = 0;
-uint16_t bluetoothTickRate = 100;
+uint16_t bluetoothTickRate = 20;
 uint16_t tick = 0;
 uint16_t tickRateSeconds = 1000;
 uint8_t firstInterval = 1;
@@ -50,7 +50,7 @@ void loop()
   MotorLoop();
   t.update();
   if (Serial.available() > 0){
-    //parseData(btReadData());
+    parseData(btReadData());
   }
   delay(50);
 }
@@ -69,7 +69,11 @@ void pulseTickMillis(void) {
 
 void pulseTickBluetooth(void) {
     unsigned long timeMilli = millis();
-    btSendPosData(GetGyro(), GetDistance(), GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+    if ((state == ROTATE_LEFT || state == ROTATE_RIGHT) &&  tick <= firstInterval) {
+      btSendPosData(GetGyro(), GetNegativeDistance(), GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+    } else {
+      btSendPosData(GetGyro(), GetDistance(), GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+    }
 }
 
 
@@ -84,20 +88,25 @@ void state_machine(int16_t sensors)
     case STOP:
       if (sensors == BOTH) {
         Stop();
+        ResetDistance();
         state = ROTATE_RIGHT;
         tick = 0;
       }
         else if(sensors == NONE) {
         state = FORWARD;
+        ResetDistance();
       } else if (sensors == SENSOR_RIGHT) {
         //rotate left
+        ResetDistance();
         state = ROTATE_LEFT;
       } else if (sensors == SENSOR_LEFT){
         //rotate right
+        ResetDistance();
         state = ROTATE_RIGHT;
         tick = 0;
       } else if (sensors == SENSOR_LEFT){
         //rotate right
+        ResetDistance();
         state = ROTATE_RIGHT;
         tick = 0;
       }

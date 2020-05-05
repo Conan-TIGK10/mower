@@ -39,7 +39,6 @@ void btSendPosData(int gyro, int motor, int ultra, int lightH, unsigned long mil
     Serial.print(",");
     Serial.print(milli);
     Serial.print("&");
-    delay(20); // Might work without delay, need to ensure that its not called constantly
 }
 
 //sending multiple data, needs size of array/pointer.

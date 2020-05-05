@@ -35,7 +35,6 @@ void Forward(void)
 }
 void Backward(void)
 {
-  ResetDistance();
   Encoder_1.setMotorPwm(moveSpeed);
   Encoder_2.setMotorPwm(-moveSpeed);
 }
@@ -121,6 +120,20 @@ float GetDistance() {
   distance = distance * 11,9;
   return distance;
 }
+
+float GetNegativeDistance() {
+  float distance = 0;
+  if (motorCounterL >= motorCounterR){
+     distance = motorCounterL / 6,5;
+  } /*
+  else {
+    distance = motorCounterR / 6,5;
+  } */
+  distance = distance * 11,9;
+  distance *= -1;
+  return distance;
+}
+
 
 void ResetDistance() {
   motorCounterL = 0;

@@ -48,6 +48,8 @@ void runGyro(){
 
 double GetGyro() {
   if (gyroZ < 0) {
-   return 360 + gyroZ;
+   return (360 + gyroZ);
+  } else {
+    return gyroZ;
   }
 }
