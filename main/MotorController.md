@@ -1,5 +1,12 @@
 # Motor Controller
 
+## `MotorLoop(void) : void`
+**Description** : executes encoders loop and reads the motor rotation for increasing motor counter.
+### Use:
+```c++
+MotorLoop();
+```
+
 ## `Forward(void) : void`
 
 **Description** : Moves motor forward with PWM.
@@ -72,4 +79,32 @@ ChangeDirectionRandom();
 ### Use:
 ```c++
 ChangeSpeedRandom();
+```
+
+## `SetupTTC(void) : void`
+**Description** : Sets up the PWM freq to 8KHz.
+### Use:
+```c++
+SetupTTC();
+```
+
+## `GetDistance(void) : float`
+**Description** : Utilizes the motor counter to calculate distance in cm.
+### Use:
+```c++
+float distanceForward = GetDistance();
+```
+
+## `GetNegativeDistance(void) : float`
+**Description** : Utilizes the motor counter to calculate distance in cm, sets value to negative. Useful when robot is reversing.
+### Use:
+```c++
+float distanceBackwards = GetNegativeDistance();
+```
+
+## `ResetDistance(void) : void`
+**Description** :Resets the motor counter.
+### Use:
+```c++
+ResetDistance();
 ```
