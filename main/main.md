@@ -14,9 +14,26 @@ none
 ```c++
 none
 ```
+
+## `pulseTickSeconds(void) : void`
+
+**Description** : increments timer ticks every seconds.
+### Use:
+```c++
+timer.every(tickrateSeconds, pulseTickSeconds);
+```
+
+## `pulseTickBluetooth(void) : void`
+
+**Description** : Sends bluetooth data each 20ms..
+### Use:
+```c++
+timer.every(tickrate20ms, pulseTickBluetooth);
+```
+
 ## `state_machine(int16_t any) : void`
 
-**Description** : Default project state machine, expects sensor data as int16_t. Handles directional states dependant on sensor state data.
+**Description** : Default project state machine, expects sensor data as int16_t. Handles directional states dependant on sensor state data. Also handles directional control from application through bluetooth.
 ### Use:
 ```c++
 int16_t sensors = LT_IsInside();
