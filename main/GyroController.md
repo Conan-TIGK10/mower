@@ -15,3 +15,11 @@ none
 none
 ```
 
+## `GetGyro(void) : double`
+
+**Description** : Checks the gyro and returns the angle of Z-axis. 0-360
+### Use:
+```c++
+double gyroZ;
+```
+
