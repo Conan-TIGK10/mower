@@ -22,3 +22,15 @@ none
 int16_t sensors = LT_IsInside();
 state_machine(sensors);
 ```
+
+## `parseData(char * any) : void`
+
+**Description** : Default project parse data. Gets a char array of the message and parses it into 3 different integers that we can read for robot instruction.
+### Use:
+```c++
+int mode = 0;
+int xJoystick = 0;
+int yJoystick = 0;
+```
+
+
