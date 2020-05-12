@@ -31,6 +31,9 @@ int mode = 0;
 int xJoystick = 0;
 int yJoystick = 0;
 
+double ultrasonicDistance = 0;
+int ultrasonicTick = 50;
+
 void setup()
 {
   Serial.begin(115200);
@@ -39,6 +42,7 @@ void setup()
   t.every(tickRateSeconds, pulseTickSeconds);
   t.every(tickRateMillis, pulseTickMillis);
   t.every(bluetoothTickRate, pulseTickBluetooth);
+  t.every(ultrasonicTick, pulseTickUltrasonic);
   SetupTTC();
 
 }
@@ -52,7 +56,7 @@ void loop()
   if (Serial.available() > 0){
     parseData(btReadData());
   }
-  delay(50);
+  //delay(50);
 }
 
 void pulseTickSeconds(void){
@@ -76,10 +80,15 @@ void pulseTickBluetooth(void) {
     }
 }
 
+void pulseTickUltrasonic(void){
+  ultrasonicDistance = GetUltrasonicDistance();
+  
+  }
+
 
 void state_machine(int16_t sensors) 
 {
-  if(GetUltrasonicDistance() < 5 && state != ROTATE_RIGHT){
+  if(ultrasonicDistance < 5 && state != ROTATE_RIGHT){
     state = ROTATE_RIGHT;
     tick = 0;
   }
@@ -222,7 +231,7 @@ void parseData(char * data){
           isMinus = 1;
           count++;
           }
-        while(data[count+internalCount] != '&'){
+        while(data[count+internalCount] != '&' && internalCount < 6){
           internalCount++;
         }
         if(internalCount == 2){ //Y är en siffra
