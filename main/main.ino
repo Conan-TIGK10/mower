@@ -258,4 +258,9 @@ void parseData(char * data){
     }
     free(data);
   }
+
+  States getState(void){
+    return state;
+    
+    }
       

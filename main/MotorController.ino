@@ -13,10 +13,10 @@ float motorCounterR = 0;
 void MotorLoop(){
   Encoder_1.loop();
   Encoder_2.loop();
-  if (digitalRead(Encoder_1.getPortA())) {
+  if (digitalRead(Encoder_1.getPortA()) && (getState() == FORWARD || getState() == BACKWARDS)) {
     motorCounterL ++;
   }
-  if (digitalRead(Encoder_2.getPortA())) {
+  if (digitalRead(Encoder_2.getPortA()) && (getState() == FORWARD || getState() == BACKWARDS)) {
     motorCounterR ++;
   }
 }
