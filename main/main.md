@@ -31,6 +31,14 @@ timer.every(tickrateSeconds, pulseTickSeconds);
 timer.every(tickrate20ms, pulseTickBluetooth);
 ```
 
+## `pulseTickUltrasonic(void) : void`
+
+**Description** : Updates the ultrasonic distance every 50ms
+### Use:
+```c++
+t.every(ultrasonicTick, pulseTickUltrasonic);
+```
+
 ## `state_machine(int16_t any) : void`
 
 **Description** : Default project state machine, expects sensor data as int16_t. Handles directional states dependant on sensor state data. Also handles directional control from application through bluetooth.
