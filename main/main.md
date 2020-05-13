@@ -59,3 +59,12 @@ int yJoystick = 0;
 ```
 
 
+## `getState(void) : States`
+
+**Description** : Returns the current state of the state machine
+### Use:
+```c++
+States state;
+```
+
+
