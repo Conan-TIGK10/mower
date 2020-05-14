@@ -19,6 +19,8 @@ void MotorLoop(){
   if (digitalRead(Encoder_2.getPortA()) && (getState() == FORWARD || getState() == BACKWARDS)) {
     motorCounterR ++;
   }
+  Serial.print("State: ");
+  Serial.println(getState());
 }
 
 void printCounter(){
