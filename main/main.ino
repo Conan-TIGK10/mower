@@ -26,6 +26,7 @@ uint16_t tick = 0;
 uint16_t tickRateSeconds = 1000;
 uint8_t firstInterval = 1;
 uint8_t secondInterval = 3;
+bool backwardsFlag = 0;
 
 int mode = 0;
 int xJoystick = 0;
@@ -52,6 +53,8 @@ void loop()
   state_machine(temp);
   runGyro();
   MotorLoop();
+  if (state == FORWARD || backwardsFlag) 
+    incrementCount();
   t.update();
   if (Serial.available() > 0){
     parseData(btReadData());
@@ -133,12 +136,15 @@ void state_machine(int16_t sensors)
 
 
       if(tick <= firstInterval){
+        backwardsFlag = 1;
         Backward();
       }
       else if(tick > firstInterval && tick < secondInterval){
+        backwardsFlag = 0;
         TurnLeft();
       }
       else{
+        backwardsFlag = 0;
         state = STOP;
       }
        
@@ -151,11 +157,14 @@ void state_machine(int16_t sensors)
       //Serial.println(tick);
 
       if(tick <= firstInterval){
+        backwardsFlag = 1;
         Backward();
       }
       else if(tick > firstInterval && tick < secondInterval){
+        backwardsFlag = 0;
         TurnRight();
       } else{
+        backwardsFlag = 0;
         state = STOP;
       }
 

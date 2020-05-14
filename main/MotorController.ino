@@ -13,20 +13,23 @@ float motorCounterR = 0;
 void MotorLoop(){
   Encoder_1.loop();
   Encoder_2.loop();
-  if (digitalRead(Encoder_1.getPortA()) && (getState() == FORWARD || getState() == BACKWARDS)) {
-    motorCounterL ++;
-  }
-  if (digitalRead(Encoder_2.getPortA()) && (getState() == FORWARD || getState() == BACKWARDS)) {
-    motorCounterR ++;
-  }
-  Serial.print("State: ");
-  Serial.println(getState());
 }
 
 void printCounter(){
   Serial.print("pulse counterL?:");
   Serial.println(motorCounterL);
   Serial.print("pulse counterR?:");
+  Serial.println(motorCounterR);
+}
+
+void incrementCount() {
+  if (digitalRead(Encoder_1.getPortA())){
+    motorCounterL ++;
+  }
+  if (digitalRead(Encoder_2.getPortA())) {
+    motorCounterR ++;
+  }
+  Serial.println(motorCounterL);
   Serial.println(motorCounterR);
 }
 
