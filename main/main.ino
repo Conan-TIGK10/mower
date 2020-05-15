@@ -32,7 +32,7 @@ int mode = 0;
 int xJoystick = 0;
 int yJoystick = 0;
 
-double ultrasonicDistance = 0;
+double ultrasonicDistance = 20;
 int ultrasonicTick = 50;
 
 void setup()
@@ -59,7 +59,6 @@ void loop()
   if (Serial.available() > 0){
     parseData(btReadData());
   }
-  //delay(50);
 }
 
 void pulseTickSeconds(void){
@@ -77,9 +76,13 @@ void pulseTickMillis(void) {
 void pulseTickBluetooth(void) {
     unsigned long timeMilli = millis();
     if ((state == ROTATE_LEFT || state == ROTATE_RIGHT) &&  tick <= firstInterval) {
-      btSendPosData(GetGyro(), GetNegativeDistance(), GetUltrasonicDistance(), LT_IsInside(), timeMilli);
-    } else {
-      btSendPosData(GetGyro(), GetDistance(), GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+      btSendPosData(GetGyro(), 0, GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+    }
+    else if (state == ROTATE_LEFT || state == ROTATE_RIGHT) {
+      btSendPosData(GetGyro(), 1, GetUltrasonicDistance(), LT_IsInside(), timeMilli); 
+    }
+    else {
+      btSendPosData(GetGyro(), 2, GetUltrasonicDistance(), LT_IsInside(), timeMilli);
     }
 }
 
