@@ -41,17 +41,6 @@ void btSendPosData(int gyro, int motor, int ultra, int lightH, unsigned long mil
     Serial.print("&");
 }
 
-//sending multiple data, needs size of array/pointer.
-/* void btSendMultiplePosData(int protocol, double* outData, int size) {
-    bluetooth.write(protocol);
-    bluetooth.write(",");
-    for (int i = 0; i < size; i++){
-      bluetooth.write(outData[i]);
-      bluetooth.write(",");
-    }
-    delay(20); // Might work without delay, need to ensure that its not called constantly
-}
-*/
 //Use incase btSendMultiplePosData() does not work as intended
 void btSendPosData(int protocol, double x, double y) {
       //println incase application expects \n, might need adjustments.
@@ -65,15 +54,6 @@ void btSendPosData(int protocol, double x, double y) {
 char * btReadData() {
  char *data = (char*) malloc(32);
  int readdata = 0,i = 0,count = 0;
- /*
- *(data) = '/';
- *(data+1) = '1';
- *(data+2) = ',';
- *(data+3) = '1';
- *(data+4) = ',';
- *(data+5) = '2';
- *(data+6) = '&';
- */
 
   while(Serial.available() > 0){
       data[count] = Serial.read();
@@ -81,4 +61,81 @@ char * btReadData() {
   }
   
   return data;
+}
+
+void parseData(char * data){
+  int count = 0;
+  int isX = 0; //if 0 then its the x value, if 1 then its y
+  while(data[count] != '&' || (data[0] == '/' && count < 32)){
+    if(count == 1){
+        mode = data[1] - '0';
+        if(mode == 1) {
+          state = JOYSTICK;
+        } else {
+          state = STOP;
+        }
+
+      }else if(data[count] == ',' && isX == 0){
+        int internalCount = 1;
+        isX = 1;
+        int isMinus = 0;
+        if(data[count+1] == '-'){
+          isMinus = 1;
+          count++;
+          }
+        while(data[count+internalCount] != ','){
+          internalCount++;
+        }
+        if(internalCount == 2){ //X är en siffra
+          xJoystick = (data[count+1] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
+        }
+        if(internalCount == 3){ //X är två siffor
+          xJoystick = ((data[count+1] - '0')*10) + (data[count+2] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
+        }
+        if(internalCount == 4){ //X är tre siffror
+          xJoystick = ((data[count+1] - '0')*100) + ((data[count+2] - '0')*10) + (data[count+3] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
+        }
+        count ++;
+      }else if(data[count] == ','){
+        int internalCount = 1;
+        int isMinus = 0;
+        if(data[count+1] == '-'){
+          isMinus = 1;
+          count++;
+          }
+        while(data[count+internalCount] != '&' && internalCount < 6){
+          internalCount++;
+        }
+        if(internalCount == 2){ //Y är en siffra
+          yJoystick = (data[count+1] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
+        }
+        if(internalCount == 3){ //Y är två siffor
+          yJoystick = ((data[count+1] - '0')*10) + (data[count+2] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
+        }
+        if(internalCount == 4){ //Y är tre siffror
+          yJoystick = ((data[count+1] - '0')*100) + ((data[count+2] - '0')*10) + (data[count+3] - '0');
+          if(isMinus){
+            yJoystick *= -1;
+            }
+        }
+        count ++;
+      }
+    count++;
+    }
+    free(data);
 }
