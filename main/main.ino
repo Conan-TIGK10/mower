@@ -74,16 +74,27 @@ void pulseTickMillis(void) {
 }
 
 void pulseTickBluetooth(void) {
-    unsigned long timeMilli = millis();
-    if ((state == ROTATE_LEFT || state == ROTATE_RIGHT) &&  tick <= firstInterval) {
-      btSendPosData(GetGyro(), 0, GetUltrasonicDistance(), LT_IsInside(), timeMilli);
-    }
-    else if (state == ROTATE_LEFT || state == ROTATE_RIGHT) {
-      btSendPosData(GetGyro(), 1, GetUltrasonicDistance(), LT_IsInside(), timeMilli); 
-    }
-    else {
-      btSendPosData(GetGyro(), 2, GetUltrasonicDistance(), LT_IsInside(), timeMilli);
-    }
+  unsigned long timeMilli = millis();
+  if (state == JOYSTICK) {
+      if (yJoystick == 1) {
+        btSendPosData(GetGyro(), 2, GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+      } else if (xJoystick == 2) {
+        btSendPosData(GetGyro(), 1, GetUltrasonicDistance(), LT_IsInside(), timeMilli); 
+      } else if (xJoystick == 1) {
+        btSendPosData(GetGyro(), 1, GetUltrasonicDistance(), LT_IsInside(), timeMilli); 
+      } else if (yJoystick == 2) {
+        btSendPosData(GetGyro(), 0, GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+      } else {
+        btSendPosData(GetGyro(), 1, GetUltrasonicDistance(), LT_IsInside(), timeMilli); 
+      }
+  } else if ((state == ROTATE_LEFT || state == ROTATE_RIGHT) &&  tick <= firstInterval) {
+    btSendPosData(GetGyro(), 0, GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+  } else if (state == ROTATE_LEFT || state == ROTATE_RIGHT) {
+    btSendPosData(GetGyro(), 1, GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+  } else if (state == FORWARD) {
+    btSendPosData(GetGyro(), 2, GetUltrasonicDistance(), LT_IsInside(), timeMilli);
+  }
+  
 }
 
 void pulseTickUltrasonic(void){
@@ -94,7 +105,7 @@ void pulseTickUltrasonic(void){
 
 void state_machine(int16_t sensors) 
 {
-  if(ultrasonicDistance < 5 && state != ROTATE_RIGHT){
+  if(ultrasonicDistance < 5 && state != ROTATE_RIGHT && state != JOYSTICK){
     state = ROTATE_RIGHT;
     tick = 0;
   }
